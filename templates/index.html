@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body
-    class="bg-zinc-100 flex flex-col p-1 md:p-8"
-  >
+  <body class="bg-zinc-100 flex flex-col p-1 md:p-8">
     <h1 class="text-2xl font-bold underline">NYT Spelling Bee Solver!</h1>
-    <div class="bg-zinc-200 border border-zinc-300 p-4 my-4 max-w-[500px] rounded">
+    <div
+      class="bg-zinc-200 border border-zinc-300 p-4 my-4 max-w-[500px] rounded"
+    >
       <h2 class="text-lg font-bold underline">Spelling Bee Form</h2>
       <form action="/solve" method="post" id="bee-form" class="flex flex-col">
         <label for="letters">Enter 6 letters:</label>
@@ -29,8 +29,8 @@
     <div class="results w-full" id="results" style="display: none">
       <h2 class="text-xl font-bold underline">Valid Words:</h2>
       <ul id="word-list"></ul>
-      <h2 class="text-xl font-bold underline">Pangram</h2>
-      <div id="pangram"></div>
+      <h2 class="text-xl font-bold underline">Pangram(s)</h2>
+      <ul id="pangram-list"></ul>
     </div>
 
     <div id="error" style="display: none"></div>
@@ -77,11 +77,6 @@
                 document.getElementById("results").style.display = "none";
               } else {
                 document.getElementById("error").style.display = "none";
-
-                // Update pangram
-                const pangram = data.pangram || "No Pangram Found";
-                document.getElementById("pangram").textContent = `${pangram}`;
-
                 // Update word list
                 const wordList = document.getElementById("word-list");
                 wordList.innerHTML = "";
@@ -89,6 +84,15 @@
                   const li = document.createElement("li");
                   li.textContent = word;
                   wordList.appendChild(li);
+                });
+
+                // Update pangram list
+                const pangramList = document.getElementById("pangram-list");
+                pangramList.innerHTML = "";
+                data.pangrams.forEach((word) => {
+                  const li = document.createElement("li");
+                  li.textContent = word;
+                  pangramList.appendChild(li);
                 });
 
                 document.getElementById("results").style.display = "block";
