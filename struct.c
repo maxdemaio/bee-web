@@ -3,6 +3,9 @@
 #include <stdint.h>
 #include <string.h>
 
+// total words in dict.txt
+#define MAX_WORDS 370104
+
 struct WordBinaryMap
 {
   // general word length max (1 char is 1 byte)
@@ -35,7 +38,7 @@ void makeWordBinaryMap(void)
   // open the dictionary
   // note: small_dictionary.txt is used in this example
   // but, feel free to use a real dictionary similar to curate.py
-  FILE *dict_file = fopen("small_dictionary.txt", "r");
+  FILE *dict_file = fopen("dict.txt", "r");
   if (!dict_file)
   {
     perror("Failed to open dictionary file");
