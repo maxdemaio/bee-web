@@ -19,7 +19,6 @@ struct WordBinaryMap
 // binary: 00000011000000000000000000000101
 
 // prototyping
-uint32_t makeCypher(char *letter);
 void makeWordBinaryMap(void);
 
 void makeWordBinaryMap(void)
@@ -106,16 +105,6 @@ void makeWordBinaryMap(void)
   fclose(binary_file_w);
   fclose(dict_file);
   free(word_binaries);
-}
-
-uint32_t makeCypher(char *letters)
-{
-  uint32_t cypher = 0;
-  for (int i = 0; i < strlen(letters); i++)
-  {
-    cypher |= (1u << (letters[i] - 'a'));
-  }
-  return ~cypher;
 }
 
 int main(int argc, char *argv[])

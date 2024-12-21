@@ -61,10 +61,16 @@
     </div>
 
     <div class="results w-full" id="results" style="display: none">
-      <h2 class="text-xl font-bold underline">Valid Words:</h2>
-      <ul id="word-list"></ul>
-      <h2 class="text-xl font-bold underline">Pangram(s)</h2>
-      <ul id="pangram-list"></ul>
+      <div class="flex flex-wrap gap-4">
+        <div>
+          <h2 class="text-xl font-bold underline">Valid Words</h2>
+          <ul id="word-list"></ul>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold underline">Pangram(s)</h2>
+          <ul id="pangram-list"></ul>
+        </div>
+      </div>
     </div>
 
     <div id="error" style="display: none"></div>
