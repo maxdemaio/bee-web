@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="bg-zinc-100 flex flex-col p-1 md:p-8"
+  >
+    <h1 class="text-2xl font-bold underline">NYT Spelling Bee Solver!</h1>
+    <div class="bg-zinc-200 border border-zinc-300 p-4 my-4 w-[500px] rounded">
+      <h2 class="text-lg font-bold underline">Spelling Bee Form</h2>
+      <form action="/solve" method="post" id="bee-form" class="flex flex-col">
+        <label for="letters">Enter 6 letters:</label>
+        <input type="text" id="letters" name="letters" maxlength="6" required />
+        <label for="required_letter">Enter the required letter:</label>
+        <input
+          type="text"
+          id="required_letter"
+          name="required_letter"
+          maxlength="1"
+          required
+        />
+        <button type="submit">Solve</button>
+      </form>
+    </div>
+
+    <div class="results w-full" id="results" style="display: none">
+      <h2>Words:</h2>
+      <ul id="word-list"></ul>
+      <h2>Pangram</h2>
+      <div id="pangram"></div>
+    </div>
+
+    <div id="error" style="display: none"></div>
+
+    <script>
+      document
+        .getElementById("bee-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const letters = document.getElementById("letters").value;
+          const requiredLetter =
+            document.getElementById("required_letter").value;
+
+          // Validate input length
+          if (letters.length !== 6 || requiredLetter.length !== 1) {
+            document.getElementById("error").textContent =
+              "Please enter exactly 6 letters and 1 required letter.";
+            document.getElementById("error").style.display = "block";
+            document.getElementById("results").style.display = "none";
+            return;
+          }
+
+          // Combine letters and required letter for the payload
+          const payload = {
+            letters: letters,
+            required_letter: requiredLetter,
+          };
+
+          fetch("/solve", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `letters=${encodeURIComponent(
+              payload.letters
+            )}&required_letter=${encodeURIComponent(payload.required_letter)}`,
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.error) {
+                document.getElementById("error").textContent = data.error;
+                document.getElementById("error").style.display = "block";
+                document.getElementById("results").style.display = "none";
+              } else {
+                document.getElementById("error").style.display = "none";
+
+                // Update pangram
+                const pangram = data.pangram || "No Pangram Found";
+                document.getElementById("pangram").textContent = `${pangram}`;
+
+                // Update word list
+                const wordList = document.getElementById("word-list");
+                wordList.innerHTML = "";
+                data.words.forEach((word) => {
+                  const li = document.createElement("li");
+                  li.textContent = word;
+                  wordList.appendChild(li);
+                });
+
+                document.getElementById("results").style.display = "block";
+              }
+            })
+            .catch((error) => {
+              document.getElementById("error").textContent =
+                "An error occurred.";
+              document.getElementById("error").style.display = "block";
+              document.getElementById("results").style.display = "none";
+            });
+        });
+    </script>
+  </body>
+</html>
